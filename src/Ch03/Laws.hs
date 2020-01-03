@@ -1,5 +1,5 @@
 -- | Unlawful lenses in here
-module Laws where
+module Ch03.Laws where
 
 import Control.Lens
 

@@ -1,4 +1,4 @@
-module LensProduct where
+module Ch03.LensProduct where
 
 import Control.Lens
 import Control.Lens.Unsound

@@ -1,4 +1,4 @@
-module Msg where
+module Ch03.Msg where
 
 import Control.Lens
 
