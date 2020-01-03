@@ -4,11 +4,9 @@ import Control.Lens
 
 data Err
   = ReallyBadError
-      { _msg :: String
-      }
+      { _msg :: String }
   | ExitCode
-      { _code :: Int
-      }
+      { _code :: Int }
 
 msg :: Lens' Err String
 msg = lens g s

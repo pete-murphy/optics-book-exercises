@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 -- | Unlawful lenses in here
 module Ch03.Laws where
 
@@ -55,3 +57,21 @@ unlawful4 = lens g s
     s :: Maybe m -> m -> Maybe m
     s (Just _) m = Just m
     s Nothing _ = Nothing
+
+-----------------------------------------------
+-- | Write a lawful lens for the following type
+
+data Builder =
+  Builder
+    { _context :: [String]
+    , _build   :: [String] -> String
+    }
+
+-- Not sure about this one
+builder :: Lens' Builder String
+builder = lens g s
+  where 
+    g :: Builder -> String
+    g Builder{..} = _build _context
+    s :: Builder -> String -> Builder
+    s b str = b {_build = const str}
