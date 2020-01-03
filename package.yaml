@@ -1,0 +1,54 @@
+name:                optics-book
+version:             0.1.0.0
+github:              "githubuser/optics-book"
+license:             BSD3
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/optics-book#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- containers
+- lens
+- lens-aeson
+- mtl
+- text
+
+default-extensions:
+- BlockArguments
+- FlexibleInstances
+- FlexibleContexts
+- LambdaCase
+- RankNTypes
+- ScopedTypeVariables
+- TemplateHaskell
+- TypeApplications
+- TypeFamilies
+
+ghc-options:
+- -Wall
+
+library:
+  source-dirs: src
+
+executables:
+  optics-book-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - optics-book
