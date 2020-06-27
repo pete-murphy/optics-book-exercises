@@ -19,6 +19,8 @@ dependencies:
   - base >= 4.7 && < 5
   - aeson
   - containers
+  - hedgehog
+  - hspec
   - lens
   - lens-aeson
   - mtl
@@ -40,3 +42,16 @@ ghc-options:
 
 library:
   source-dirs: src
+
+tests:
+  optics-book-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - optics-book
+      - hspec
+      - hedgehog
