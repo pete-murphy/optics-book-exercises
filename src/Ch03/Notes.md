@@ -119,8 +119,7 @@ unlawful2 = lens g s
 ```
 
 2. Test the get-set and set-set laws for the msg lens we wrote this chapter. Does it pass these laws?
-3. There’s a different way we could have written the msg lens such that it would PASS the set-get
-   law and the set-set law, but fail get-set. Implement this other version.
+3. There’s a different way we could have written the msg lens such that it would PASS the set-get law and the set-set law, but fail get-set. Implement this other version.
 4. Think up a new lens which is still useful even though it breaks a law or two.
 5. BONUS (this one is tricky): Live a little; write a lens which violates ALL THREE LAWS
 6. BONUS (another tricky one): Can you write a lawful lens for the following type:

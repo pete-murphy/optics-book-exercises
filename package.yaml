@@ -41,7 +41,8 @@ ghc-options:
   - -Wall
 
 library:
-  source-dirs: src
+  source-dirs:
+    - src
 
 tests:
   optics-book-test:

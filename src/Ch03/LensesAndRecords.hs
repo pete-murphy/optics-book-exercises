@@ -2,11 +2,11 @@ module Ch03.LensesAndRecords where
 
 import Control.Lens
 
-data Ship =
-  Ship
-    { _name    :: String
-    , _numCrew :: Int
-    }
+data Ship
+  = Ship
+      { _name :: String,
+        _numCrew :: Int
+      }
   deriving (Show)
 
 makeLenses ''Ship
@@ -15,7 +15,7 @@ getNumCrew :: Ship -> Int
 getNumCrew = _numCrew
 
 setNumCrew' :: Ship -> Int -> Ship
-setNumCrew' (Ship n _) m = Ship n m
+setNumCrew' (Ship n _) = Ship n
 
 setNumCrew :: Ship -> Int -> Ship
 setNumCrew ship newNumCrew = ship {_numCrew = newNumCrew}
