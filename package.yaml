@@ -43,6 +43,7 @@ ghc-options:
 library:
   source-dirs:
     - src
+    - test
 
 tests:
   optics-book-test:

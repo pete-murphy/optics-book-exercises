@@ -28,4 +28,4 @@ prop_setGetPair :: Property
 prop_setGetPair = setGet genPair genString unlawful3
 
 prop_getSetPair :: Property
-prop_getSetPair = getSet _
+prop_getSetPair = getSet genPair unlawful3
