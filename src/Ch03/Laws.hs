@@ -31,20 +31,20 @@ unlawful2 = lens g s
 
 -- `s (s (0, "") "a") "b"` is `(0, "ab")` not `(0, "a")`
 
--- | Violates all three
+-- | Violates all three -- Edit: no it doesn't
 unlawful3 ::
   forall a m.
   Monoid m =>
-  Lens' (a, m) m
+  Lens' (a, m, m) m
 unlawful3 = lens g s
   where
-    g :: (a, m) -> m
-    g _ = mempty
-    s :: (a, m) -> m -> (a, m)
-    s (x, m) m' = (x, m <> m')
+    g :: (a, m, m) -> m
+    g (_, _, x) = x
+    s :: (a, m, m) -> m -> (a, m, m)
+    s (x, m, n) m' = (x, m <> m', n)
 
--- `s (0, "") (g (0, "a"))` is `(0, "")` not `(0, "a")`
 -- `g (s (0, "") "a")` is `""` not `"a"`
+-- `s (0, "") (g (0, "a"))` is `(0, "")` not `(0, "a")`
 -- `s (s (0, "") "a") "b"` is `(0, "ab")` not `(0, "a")`
 
 -- | Still useful, maybe? (Breaks get-set)

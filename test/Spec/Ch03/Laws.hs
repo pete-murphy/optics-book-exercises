@@ -17,15 +17,34 @@ main =
   defaultMain
     [checkParallel $$(discover)]
 
-genPair :: Gen (Int, String)
-genPair =
+gen_unlawful3 :: Gen (Int, String, String)
+gen_unlawful3 =
   let s = genString
       n = genInt
-   in (,) <$> n <*> s
+   in (,,) <$> n <*> s <*> s
+
+-- Fail
+prop_unlawful1_getSet :: Property
+prop_unlawful1_getSet = getSet gen unlawful1
+  where
+    gen = (,) <$> genString <*> genString
+
+prop_unlawful1_setGet :: Property
+prop_unlawful1_setGet = setGet gen' gen unlawful1
+  where
+    gen = (,) <$> genString <*> genString
+    gen' = (,) <$> gen <*> gen
+
+-- Fail
+prop_unlawful2_getSet :: Property
+prop_unlawful2_getSet = getSet ((,) <$> genString <*> genString) unlawful1
 
 -- Fails
-prop_setGetPair :: Property
-prop_setGetPair = setGet genPair genString unlawful3
+prop_unlawful3_setGet :: Property
+prop_unlawful3_setGet = setGet gen_unlawful3 genString unlawful3
 
-prop_getSetPair :: Property
-prop_getSetPair = getSet genPair unlawful3
+prop_unlawful3_getSet :: Property
+prop_unlawful3_getSet = getSet gen_unlawful3 unlawful3
+
+prop_unlawful3_setSet :: Property
+prop_unlawful3_setSet = setSet gen_unlawful3 genString unlawful3

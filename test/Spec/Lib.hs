@@ -11,6 +11,16 @@ import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
+getSet ::
+  (Show a, Show s, Eq s) =>
+  Gen s ->
+  Lens' s a ->
+  Property
+getSet gs l =
+  property do
+    s <- forAll gs
+    set l (view l s) s === s
+
 setGet ::
   (Show a, Show s, Eq a) =>
   Gen s ->
@@ -23,15 +33,17 @@ setGet gs ga l =
     a <- forAll ga
     view l (set l a s) === a
 
-getSet ::
+setSet ::
   (Show a, Show s, Eq s) =>
   Gen s ->
+  Gen a ->
   Lens' s a ->
   Property
-getSet gs l =
+setSet gs ga l =
   property do
     s <- forAll gs
-    set l (view l s) s === s
+    a <- forAll ga
+    set l a s === set l a (set l a s)
 
 genString :: Gen String
 genString = Gen.string (Range.linear 0 100) Gen.alpha
