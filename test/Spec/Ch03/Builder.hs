@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Spec.Ch03.Builder where
 
@@ -24,17 +25,21 @@ main :: IO ()
 main =
   defaultMain
     [checkParallel $$(discover)]
+-- instance Generic Char where
+--   to = fromEnum @Int
+--   from = toEnum @Int
 
-instance Arg Char
+-- instance Arg Char
 
-instance Vary Char
+-- instance Vary Char
 
-builderGetSet :: Property
-builderGetSet =
-  property do
-    str <- forAll do genString
-    strs <- forAll do Gen.list (Range.linear 0 100) genString
-    f <- forAllFn (fn genString)
-    let b = Builder strs f
-    -- Is this possible to implement?
-    set builder (view builder b) b === undefined
+-- builderGetSet :: Property
+-- builderGetSet =
+--   property do
+--     str <- forAll do genString
+--     strs <- forAll do Gen.list (Range.linear 0 100) genString
+--     f <- forAllFn (fn genString)
+--     let b = Builder strs f
+--     -- Is this possible to implement?
+--     -- set builder (view builder b) b === undefined
+--     pure undefined
