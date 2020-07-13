@@ -20,6 +20,7 @@ dependencies:
   - aeson
   - containers
   - hedgehog
+  - hedgehog-fn
   - hspec
   - lens
   - lens-aeson
