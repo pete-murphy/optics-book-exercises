@@ -33,6 +33,7 @@ default-extensions:
   - FlexibleContexts
   - LambdaCase
   - RankNTypes
+  - RecordWildCards
   - ScopedTypeVariables
   - TemplateHaskell
   - TypeApplications

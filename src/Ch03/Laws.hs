@@ -19,14 +19,11 @@ unlawful1 = lens g s
 
 -- | Violates set-set (idempotence)
 unlawful2 ::
-  forall a m.
   Semigroup m =>
   Lens' (a, m) m
 unlawful2 = lens g s
   where
-    g :: (a, m) -> m
     g = snd
-    s :: (a, m) -> m -> (a, m)
     s (x, m) m' = (x, m <> m')
 
 -- `s (s (0, "") "a") "b"` is `(0, "ab")` not `(0, "a")`
@@ -73,4 +70,10 @@ builder = lens g s
     g :: Builder -> String
     g Builder {..} = _build _context
     s :: Builder -> String -> Builder
-    s b str = b {_build = const str}
+    s b str =
+      b
+        { _build = \c' ->
+            if c' == _context b
+              then str
+              else _build b c'
+        }
