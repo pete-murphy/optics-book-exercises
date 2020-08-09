@@ -36,12 +36,17 @@ duloc :: Kingdom
 duloc =
   Kingdom "Duloc" (Army 22 14) (Gate True 10.0)
 
+infix 2 \!~
+
+(\!~) :: s -> Lens' s Bool -> s
+s \!~ l = over l not s
+
 goalA :: Kingdom
 goalA =
   duloc
     & name <>~ ": a perfect place"
+    & (\!~ gate . open)
     & army . knights +~ 28
-    & gate . open &&~ False
 
 goalB :: Kingdom
 goalB =
