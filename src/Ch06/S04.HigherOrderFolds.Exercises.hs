@@ -53,32 +53,56 @@ ex1i = worded . droppingWhile isAlpha folded
 sample :: [Int]
 sample = [-10, -5, 4, 3, 8, 6, -2, 3, -5, -7]
 
+-- |
 -- >>> ex2_1
 -- 2
 ex2_1 :: Int
-ex2_1 = undefined
+ex2_1 = lengthOf (takingWhile (< 0) folded) sample
 
+-- |
 -- >>> ex2_2
 -- Just 4
 ex2_2 :: Maybe Int
-ex2_2 = undefined
+ex2_2 = maximumOf (taking 4 folded) sample
 
+-- |
 -- >>> ex2_3
 -- Just 3
 ex2_3 :: Maybe Int
-ex2_3 = undefined
+ex2_3 = sample ^? dropping 1 (droppingWhile (/= 4) folded)
 
+-- Better way of doing this one??
+
+-- |
 -- >>> ex2_4
 -- 2
 ex2_4 :: Int
-ex2_4 = undefined
+ex2_4 = lengthOf (takingWhile (< 0) (backwards folded)) sample
 
+-- |
 -- >>> ex2_5
--- [4, 3, 8, 6]
+-- [4,3,8,6]
 ex2_5 :: [Int]
-ex2_5 = undefined
+-- ex2_5 = sample ^.. takingWhile (>0) (droppingWhile (<0) folded)
+-- ex2_5 = sample ^.. (takingWhile (>0) $ droppingWhile (<0) folded)
+ex2_5 =
+  sample ^.. do
+    folded
+      & droppingWhile (< 0)
+      & takingWhile (> 0)
 
+-- |
 -- >>> ex2_bonus
--- [4, 3, 8, 6, -2, 3]
+-- [4,3,8,6,-2,3]
 ex2_bonus :: [Int]
-ex2_bonus = undefined
+-- ex2_bonus = sample ^.. backwards (droppingWhile (< 0) (backwards (droppingWhile (< 0) folded)))
+-- ^^^^ The example above seems gross to me. I also don't really like ($), hard to track where end of scope is.
+-- I also imagine the below is sacrilege.
+ex2_bonus = sample ^.. do
+  folded
+    & droppingWhile (< 0)
+    & backwards
+    & droppingWhile (< 0)
+    & backwards
+--  backwards (droppingWhile (< 0) (backwards (droppingWhile (< 0) folded)))
+
