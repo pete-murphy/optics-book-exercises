@@ -224,8 +224,25 @@ filtered :: (s -> Bool) -> Fold s s
 ```
 
 Already this seems different: `filtered` _constructs_ a `Fold` (instead of `(a -> Bool) -> Fold s a -> Fold s a`).
-Is this a generalizable intuition for "-ed" functions.
+Is this a generalizable intuition for "-ed" functions?
 (As opposed to "-ing" functions).
 
+> If we want to avoid using the underscore field accessor to build a predicate, we can use `filteredBy`
 
+```haskell
+filteredBy :: Fold s a -> Fold s s
+```
 
+(This seems odd to me—where's the predicate function?)
+
+Aha:
+> The simplest signature still looks a bit strange, we can see that it accepts a fold from `s` to `a`, but doesn’t actually use the `a` for anything.
+> This is because `filteredBy` runs the given fold on all elements it receives and checks whether that yields any values.
+> It filters out any elements for which the given fold yields no values and lets the others through.
+> That is, if (`has theFold s`) is `True` then the value is passed on, otherwise it's filtered out.
+
+```haskell
+only :: Eq a => a -> Fold a ()
+```
+
+> This is a _utility_ fold. We're unlikely to use it on its own.
