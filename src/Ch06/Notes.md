@@ -89,6 +89,29 @@ The author refers to this as "allow[ing] you to provide your folding behaviour _
 
 > Optics are just values, we can pass them around to functions if we like. Let's see an Object Oriented language do THAT with dot-notation.
 
+#### Reference table of "simple" types for fold actions
+
+```haskell
+elemOf   :: Eq a => Fold s a -> a -> s -> Bool
+has      :: Fold s a -> s -> Bool -- Is this like `isNonEmpty`?
+lengthOf :: Fold s a -> s -> Int
+
+sumOf     :: Num n => Fold s n -> s -> n
+productOf :: Num n => Fold s n -> s -> n
+foldOf    :: Monoid a => Fold s a -> s -> a
+preview   :: Fold s a -> s -> Maybe a
+lastOf    :: Fold s a -> s -> Maybe a
+
+minimumOf   :: Ord a => Fold s a -> s -> Maybe a
+maximumOf   :: Ord a => Fold s a -> s -> Maybe a
+minimumByOf :: Ord a => Fold s a -> (a -> a -> Ordering) -> Maybe a
+maximumByOf :: Ord a => Fold s a -> (a -> a -> Ordering) -> Maybe a
+
+findOf    :: Fold s a -> (a -> Bool) -> s -> Maybe a
+foldrOf   :: Fold s a -> (a -> r -> r) -> r -> s -> r
+foldMapOf :: Monoid r => Fold s a -> (a -> r) -> s -> r
+```
+
 ### Combining fold results
 
 He presents the "two new actions for our folding toolbox"
@@ -170,6 +193,20 @@ dropping
   -> Fold s a
 ```
 
+Also
+
+```haskell
+takingWhile
+  :: (a -> Bool)
+  -> Fold s a
+  -> Fold s a
+
+dropping
+  :: (a -> Bool)
+  -> Fold s a
+  -> Fold s a
+```
+
 ### Backwards
 
 Another higher-order fold which is fun to use: `backwards`
@@ -177,4 +214,18 @@ Another higher-order fold which is fun to use: `backwards`
 ```haskell
 backwards :: Fold s a -> Fold s a
 ```
+
+## 6.5 Filtering Folds
+
+### Filtered
+
+```haskell
+filtered :: (s -> Bool) -> Fold s s
+```
+
+Already this seems different: `filtered` _constructs_ a `Fold` (instead of `(a -> Bool) -> Fold s a -> Fold s a`).
+Is this a generalizable intuition for "-ed" functions.
+(As opposed to "-ing" functions).
+
+
 
