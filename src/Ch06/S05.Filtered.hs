@@ -42,3 +42,46 @@ deck =
     Card "Sparkeon" Spark True [Move "Shock" 40, Move "Battery" 50]
   ]
 
+
+-- | List all the cards whose name starts with 'S'.
+-- >>> ex1 deck
+--
+ex1 :: [Card]
+ex1 = undefined
+
+-- | What’s the lowest attack power of all moves?
+-- >>> ex2 deck
+--
+ex2 :: Int
+ex2 = undefined
+
+-- | What’s the name of the first card which has more than one move?
+-- >>> ex3 deck
+--
+ex3 :: String
+ex3 = undefined
+
+-- | Are there any Hot cards with a move with more than 30 attack power?
+-- >>> ex4 deck
+-- 
+ex4 :: Bool
+ex4 = undefined
+
+-- | Are there any `Hot` cards with a move with more than 30 attack power?
+-- >>> ex5 deck
+--
+ex5 :: Bool
+ex5 = undefined
+
+-- | List the names of all holographic cards with a `Wet` aura.
+-- >>> ex6 deck
+--
+ex6 :: [String]
+ex6 = undefined
+
+-- | What’s the sum of all attack power for all moves belonging to non-Leafy cards?
+-- >>> ex7 deck
+--
+ex7 :: Int
+ex7 = undefined
+
