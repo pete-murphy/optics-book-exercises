@@ -70,6 +70,7 @@ ex2_2 = maximumOf (taking 4 folded) sample
 -- Just 3
 ex2_3 :: Maybe Int
 ex2_3 = sample ^? dropping 1 (droppingWhile (/= 4) folded)
+-- (^?) = flip preview
 
 -- Better way of doing this one??
 

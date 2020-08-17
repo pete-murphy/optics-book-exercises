@@ -77,6 +77,12 @@ _Queries_ (what author is calling queries—`findOf`, `elemOf`, `maximumByOf`, e
 
 > `firstOf`, `preview`, and `^?` are all effectively equivalent
 
+```haskell
+firstOf :: Fold s a -> s -> Maybe a
+preview :: Fold s a -> s -> Maybe a
+(^?)    :: s -> Fold s a -> Maybe a
+```
+
 Comparing `maximumBy` and `maximumByOf` types blew my mind:
 
 ```haskell
