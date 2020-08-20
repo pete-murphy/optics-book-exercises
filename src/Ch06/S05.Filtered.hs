@@ -1,14 +1,17 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Ch06.S05.Filtered where
 
 import Control.Lens
 
 -- A data structure to represent a single card
-data Card = Card
-  { _name :: String,
-    _aura :: Aura,
-    _holo :: Bool,
-    _moves :: [Move]
-  }
+data Card
+  = Card
+      { _name :: String,
+        _aura :: Aura,
+        _holo :: Bool,
+        _moves :: [Move]
+      }
   deriving (Show, Eq)
 
 -- Each card has an aura type
@@ -19,13 +22,15 @@ data Aura
   | Leafy
   deriving (Show, Eq)
 
-data Move = Move
-  { _moveName :: String,
-    _movePower :: Int
-  }
+data Move
+  = Move
+      { _moveName :: String,
+        _movePower :: Int
+      }
   deriving (Show, Eq)
 
 makeLenses ''Card
+
 makeLenses ''Move
 
 deck :: [Card]
@@ -42,46 +47,55 @@ deck =
     Card "Sparkeon" Spark True [Move "Shock" 40, Move "Battery" 50]
   ]
 
-
 -- | List all the cards whose name starts with 'S'.
--- >>> ex1 deck
---
+-- >>> all ((== 'S') . head) (map _name ex1)
+-- True
 ex1 :: [Card]
-ex1 = undefined
+ex1 =
+  deck ^.. folded
+    . filteredBy (taking 1 (name . folded) . only 'S')
 
--- | What’s the lowest attack power of all moves?
--- >>> ex2 deck
---
-ex2 :: Int
-ex2 = undefined
+-- What’s the lowest attack power of all moves?
+-- >>> ex2
+-- Just 3
+ex2 :: Maybe Int
+ex2 = minimumOf (folded . moves . folded . movePower) deck
 
--- | What’s the name of the first card which has more than one move?
--- >>> ex3 deck
---
-ex3 :: String
-ex3 = undefined
+-- What’s the name of the first card which has more than one move?
+-- >>> ex3
+-- Just "Kapichu"
+ex3 :: Maybe String
+ex3 = firstOf (folded . filteredBy (moves . to length . filtered (> 1)) . name) deck
 
--- | Are there any Hot cards with a move with more than 30 attack power?
--- >>> ex4 deck
--- 
-ex4 :: Bool
-ex4 = undefined
+-- Are there any Hot cards with a move with more than 30 attack power?
+-- >>> ex4
+-- [Card {_name = "Spicyeon", _aura = Hot, _holo = False, _moves = [Move {_moveName = "Capsaicisize", _movePower = 40}]}]
+ex4 :: [Card]
+ex4 =
+  deck ^.. folded
+    . filteredBy (aura . only Hot)
+    . filteredBy (moves . folded . movePower . filtered (> 30))
 
--- | Are there any `Hot` cards with a move with more than 30 attack power?
--- >>> ex5 deck
---
-ex5 :: Bool
-ex5 = undefined
+-- List the names of all holographic cards with a `Wet` aura.
+-- >>> ex5
+-- ["Garydose"]
+ex5 :: [String]
+ex5 =
+  deck ^.. folded
+    . filteredBy (holo . only True)
+    . filteredBy (aura . only Wet)
+    . name
 
--- | List the names of all holographic cards with a `Wet` aura.
--- >>> ex6 deck
---
-ex6 :: [String]
-ex6 = undefined
-
--- | What’s the sum of all attack power for all moves belonging to non-Leafy cards?
--- >>> ex7 deck
---
-ex7 :: Int
-ex7 = undefined
-
+-- What’s the sum of all attack power for all moves belonging to non-Leafy cards?
+-- >>> ex6
+-- 303
+ex6 :: Int
+ex6 =
+  deck
+    & sumOf
+      ( folded
+          . filtered ((/= Leafy) . _aura)
+          . moves
+          . folded
+          . movePower
+      )
