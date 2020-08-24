@@ -1,0 +1,102 @@
+# Traversals
+
+## 7.1 Introduction to Traversals
+
+Expand on the capabilities of folds, can update or set values we focus _in-place_
+Can perform _pure_ updates, but can also run _effectful_ update operations just like `traverse` can
+
+Early versions of traversals were called _multilenses_
+
+> In general we need to be more careful using a traversal because it may fail.
+
+All lenses are valid traversals, and some folds are as well but not all.
+
+### From fold to traversal
+```haskell
+-- Specialized to tuples:
+both :: Traversal (a, a) (b, b) a b
+
+-- Generally
+both :: Bitraversable r => Traversal (r a a) (r b b) a b
+```
+
+> `filtered` is an extremely powerful tool, it alters the exact same elements which would be focused when you use it in a fold
+
+## 7.2 Traversal Combinators
+
+```haskell
+-- Slightly simplified
+traversed :: Traversable f => Traversal (f a) (f b) a b
+
+-- Real type
+traversed :: Traversable f => IndexedTraversal Int (f a) (f b) a b
+```
+
+Hmm, so `IndexedTraversal` is more general than `Traversal`?
+
+### More Combinators
+
+```haskell
+worded :: Traversal' String String
+lined :: Traversal' String String
+
+-- *real types*
+worded :: Applicative f => IndexedLensLike' Int f String String
+lined  :: Applicative f => IndexedLensLike' Int f String String
+```
+
+### Traversing multiple paths at once
+
+```haskell
+beside :: Traversal s t a b
+       -> Traversal s' t' a b
+       -> Traversal (s,s') (t,t') a b
+
+beside :: Lens s t a b -> Lens s' t' a b -> Traversal (s,s') (t,t') a b
+beside :: Fold s a     -> Fold s' a      -> Fold (s,s') a
+```
+
+```haskell
+both = beside id id
+```
+
+### Focusing a specific traversal element
+
+```haskell
+element :: Traversable f => Int -> Traversal' (f a) a
+```
+
+> Because it doesn't focus EVERY element of the container it's a **monomorphic** traversal. It can't change the type of the container's elements.
+
+```haskell
+>>> [0, 1, 2, 3, 4] ^? element 2
+Just 2
+
+>>> [0..4] & element 2 *~ 100
+[0, 1, 200, 3, 4]
+```
+
+Author mentions "we'll learn an even better way to do this when we talk about **indexed optics**." I wonder what makes the latter "better"—what else would you do aside from what `element` does?
+
+```haskell
+elementOf :: Traversal' s a -> Int -> Traversal' s a
+elementOf :: Fold s a       -> Int -> Fold s a
+```
+
+```haskell
+>>> [0, 1, 2, 3, 4] ^? elementOf traversed 2
+Just 2
+```
+
+### 7.3 Traversal Composition
+
+1. Short answer questions:
+• What type of optic do you get when you compose a traversal with a fold? 
+> A fold (least upper bound)
+
+• Which of the optics we’ve learned can act as a traversal?
+> `filtered`, `traversed`
+
+• Which of the optics we’ve learned can act as a fold?
+> `folded` + all the ones from above :point-up:
+

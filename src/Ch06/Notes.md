@@ -252,3 +252,7 @@ only :: Eq a => a -> Fold a ()
 ```
 
 > This is a _utility_ fold. We're unlikely to use it on its own.
+
+## 6.6 Fold Laws
+
+There are none!
