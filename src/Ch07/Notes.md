@@ -100,3 +100,9 @@ Just 2
 • Which of the optics we’ve learned can act as a fold?
 > `folded` + all the ones from above :point-up:
 
+### 7.4 Traversal Actions
+
+```haskell
+traverseOf :: Traversal s t a b -> (a -> f b) -> s -> f t
+sequenceAOf :: Traversal s t (f a) a          -> s -> f t
+```
