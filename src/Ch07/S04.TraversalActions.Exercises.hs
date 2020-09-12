@@ -1,4 +1,4 @@
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE RankNTypes, MultiWayIf #-}
 
 module Ch07.S04.TraversalActions.Exercises where
 
@@ -77,4 +77,6 @@ data Account
 makeLenses ''Account
 
 validateAge :: Account -> Either String Account
-validateAge = user . age %%~ \a -> if a > 0 && a < 150 then pure a else Left "Invalid age"
+validateAge = user . age %%~ 
+     \a -> if a > 0
+            a < 150 then pure a else Left "Invalid age"

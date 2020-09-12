@@ -103,6 +103,62 @@ Just 2
 ### 7.4 Traversal Actions
 
 ```haskell
-traverseOf :: Traversal s t a b -> (a -> f b) -> s -> f t
-sequenceAOf :: Traversal s t (f a) a          -> s -> f t
+traverseOf  :: Traversal s t a b -> (a -> f b) -> s -> f t
+sequenceAOf :: Traversal s t (f a) a           -> s -> f t
 ```
+
+### 7.5 Custom Traversals
+
+```haskell
+type LensLike f s t a b = (a -> f b) -> (s -> f t)
+```
+> All of the optics that we've looked at so far can be written as some kind of `LensLike`.
+
+
+```
+traverse :: (Traversable g, Applicative f)
+         => (a -> f b) -> (g a -> f (g b))
+```
+
+> By generalizing (`s = g a`) and (`t = g b`) then we get the type of a traversal
+
+Do you lose information in "generalizing"? Not sure why this is a good thing.
+
+```haskell
+myTraversal :: (Applicative f)
+            => (a -> f b) -> (s -> f t)
+```
+
+### 7.6 Traversal Laws
+
+#### Law One: Respect Purity
+
+```haskell
+traverseOf myTraversal pure x == pure x
+```
+
+> This says that running the `pure` handler (which has no effects) using our traversal should be exactly the same as running `pure` on the original structure without using the traversal at all.
+
+#### Law Two: Consistent Focuses
+
+```haskell
+import Data.Functor.Compose
+
+fmap (traverseOf myTrav f) . traverseOf myTrav g $ x
+==
+getCompose . traverseOf myTrav (Compose . fmap f . g) $ x
+```
+
+> [This says] that running a handler over a traversal should **never change which elements are focused** in the traversal.
+
+> The simpler subset of this law looks like this:
+
+```haskell
+x & myTraversal %~ f
+  & myTraversal %~ g
+==
+x & myTraversal %~ (g . f)
+```
+
+> In essence this law states that the traversal should never **change which elements it focuses** due to alterations on those elements.
+
