@@ -162,3 +162,13 @@ x & myTraversal %~ (g . f)
 
 > In essence this law states that the traversal should never **change which elements it focuses** due to alterations on those elements.
 
+### 7.7 Advanced manipulation
+
+```haskell
+partsOf :: Traversal' s a -> Lens' s [a]
+```
+
+```haskell
+unsafePartsOf :: Traversal s t a b -> Lens s t [a] [b]
+```
+
