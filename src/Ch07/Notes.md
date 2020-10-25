@@ -1,6 +1,6 @@
-# Traversals
+## Traversals
 
-## 7.1 Introduction to Traversals
+### 7.1 Introduction to Traversals
 
 Expand on the capabilities of folds, can update or set values we focus _in-place_
 Can perform _pure_ updates, but can also run _effectful_ update operations just like `traverse` can
@@ -113,7 +113,6 @@ sequenceAOf :: Traversal s t (f a) a           -> s -> f t
 type LensLike f s t a b = (a -> f b) -> (s -> f t)
 ```
 > All of the optics that we've looked at so far can be written as some kind of `LensLike`.
-
 
 ```
 traverse :: (Traversable g, Applicative f)

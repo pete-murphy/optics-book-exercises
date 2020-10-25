@@ -32,6 +32,9 @@ everyOthered f = sequenceA
                  . concatMap (\(i, x) -> if odd i then [f x] else replicate i (pure x)) 
                  . zip [(1 :: Int)..]
 
+-- >>> traverseOf everyOthered pure "foo"
+-- "fooo"
+
 -- | 3
 swapped' :: Traversal' (a, a) a
 swapped' f (x,y) = (,) <$> f y <*> f x

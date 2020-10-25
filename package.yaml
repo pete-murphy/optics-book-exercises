@@ -25,6 +25,7 @@ dependencies:
   - lens
   - lens-aeson
   - mtl
+  - profunctors
   - text
 
 default-extensions:
