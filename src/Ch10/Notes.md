@@ -13,3 +13,9 @@ mapping
   :: (Functor f, Functor g)
   => Iso s t a b -> Iso (f s) (g t) (f a) (g b)
 ```
+
+### 10.7 Isos and newtypes
+
+```haskell
+
+```
